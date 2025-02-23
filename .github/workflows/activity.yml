@@ -1,0 +1,42 @@
+name: Activity Log Update
+
+on:
+  schedule:
+    - cron: '0 12 * * *'  # Runs daily at 12:00 UTC
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  commit-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Decide whether to run today
+        run: |
+          DECISION_ARRAY=(1 1 1 1 1 1 1 0 0 0)  # 7 ones, 3 zeros
+          RANDOM_PICK=${DECISION_ARRAY[$RANDOM % ${#DECISION_ARRAY[@]}]}
+          
+          if [[ $RANDOM_PICK -eq 0 ]]; then
+            echo "Skipping today's run (random choice from array)."
+            exit 0
+          fi
+
+      - name: Select a random repository
+        run: |
+          REPOS=("Inventory-Management-System" "PennyWise" "Google-Clone" "Trainify-A-Virtual-AI-Trainer" "Ransomware-Script" "FightClub")
+          SELECTED_REPO=${REPOS[$RANDOM % ${#REPOS[@]}]}
+          echo "SELECTED_REPO=$SELECTED_REPO" >> $GITHUB_ENV
+          echo "Randomly selected repository: $SELECTED_REPO"
+
+      - name: Clone the selected repository
+        run: |
+          git clone https://github.com/Piyush240604/$SELECTED_REPO.git
+          cd $SELECTED_REPO
+
+      - name: Make a commit
+        run: |
+          cd $SELECTED_REPO
+          echo "$(date) - Activity Log Update" >> activity.log
+          git config --global user.name "Piyush240604"
+          git config --global user.email "piyushprakashwakpaijan@gmail.com"
+          git add activity.log
+          git commit -m "activity update on $(date)"
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/Piyush240604/$SELECTED_REPO.git main
