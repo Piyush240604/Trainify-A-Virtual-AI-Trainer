@@ -41,7 +41,7 @@ jobs:
           cd ${{ env.SELECTED_REPO }}
           for i in $(seq 1 $NUM_COMMITS); do
             echo "$(date) - Activity Log Update $i" >> activity.log
-            git add activity.log
+            git add -f activity.log
             git commit -m "activity update $i on $(date)"
           done
 
