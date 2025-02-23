@@ -39,4 +39,4 @@ jobs:
           git config --global user.email "piyushprakashwakpaijan@gmail.com"
           git add activity.log
           git commit -m "activity update on $(date)"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/Piyush240604/$SELECTED_REPO.git main
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/Piyush240604/$SELECTED_REPO.git master
